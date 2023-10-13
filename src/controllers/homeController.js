@@ -54,6 +54,8 @@ let displayGetCRUD = async (req, res) => {
  * Hàm xử lý yêu cầu trang chỉnh sửa thông tin người dùng trên trang CRUD
  */
 let getEditCRUD = async (req, res) => {
+    // let userId = req.query.id;
+    // return res.send('hello from edit page')
     let userId = req.query.id;
     if (userId) {
         let userData = await CRUDservice.getUserInfoById(userId);
@@ -70,6 +72,7 @@ let getEditCRUD = async (req, res) => {
  */
 let putCRUD = async (req, res) => {
     let data = req.body;
+    // await CRUDservice.updateUserData(data);
     let allUsers = await CRUDservice.updateUserData(data);
     // return res.send('update done!!!')
     return res.render('displayCRUD.ejs', {

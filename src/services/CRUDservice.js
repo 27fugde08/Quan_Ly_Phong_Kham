@@ -1,14 +1,11 @@
 import bcrypt from 'bcryptjs';
 import db from '../models/index';
-import { reject } from 'bcrypt/promises';
 
 const salt = bcrypt.genSaltSync(10)
 
-// Tạo một người dùng mới và lưu vào cơ sở dữ liệu
 let createNewUser = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // Băm mật khẩu người dùng trước khi lưu vào cơ sở dữ liệu
             let hashPasswordFromBcryptjs = await hashUserPassword(data.password);
             await db.User.create({
                 email: data.email,
@@ -18,7 +15,7 @@ let createNewUser = async (data) => {
                 address: data.address,
                 phonenumber: data.phonenumber,
                 gender: data.gender === '1' ? true : false,
-                roleId: data.roleId,
+                roleId: data.roleId
             });
             resolve('create a new user succeed');
         } catch (e) {
@@ -27,7 +24,6 @@ let createNewUser = async (data) => {
     });
 }
 
-// Băm mật khẩu sử dụng bcryptjs
 let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -39,7 +35,6 @@ let hashUserPassword = (password) => {
     })
 }
 
-// Lấy tất cả người dùng từ cơ sở dữ liệu
 let getAllUser = () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -53,7 +48,6 @@ let getAllUser = () => {
     })
 }
 
-// Lấy thông tin người dùng theo ID
 let getUserInfoById = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -73,12 +67,14 @@ let getUserInfoById = (userId) => {
     })
 }
 
-// Cập nhật thông tin người dùng
 let updateUserData = (data) => {
+    // console.log('data from services')
+    // console.log(data)
     return new Promise(async (resolve, reject) => {
         try {
             let user = await db.User.findOne({
-                where: { id: data.id }
+                where: { id: data.id },
+                raw: false,
             })
             if (user) {
                 // Cập nhật thông tin người dùng
@@ -99,12 +95,12 @@ let updateUserData = (data) => {
     })
 }
 
-// Xóa người dùng theo ID
 let deleteUserById = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let user = await db.User.findOne({
-                where: { id: userId }
+                where: { id: userId },
+                raw: false,
             })
             if (user) {
                 // Xóa người dùng

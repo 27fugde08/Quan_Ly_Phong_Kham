@@ -8,7 +8,7 @@ let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
         try {
             let hashPassword = await bcrypt.hashSync(password, salt);
-            resolve(hashPassword)
+            resolve(hashPassword);
         } catch (e) {
             reject(e);
         }
@@ -19,6 +19,7 @@ let hashUserPassword = (password) => {
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
         try {
+
             let userData = {};
             let isExist = await checkUserEmail(email);
             if (isExist) {
@@ -56,26 +57,6 @@ let handleUserLogin = (email, password) => {
         }
     })
 }
-
-// Kiểm tra xem email người dùng có tồn tại trong cơ sở dữ liệu không
-let checkUserEmail = (userEmail) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let user = await db.User.findOne({
-                where: { email: userEmail }
-            })
-            if (user) {
-                resolve(true)
-            }
-            else {
-                resolve(false)
-            }
-        } catch (e) {
-            reject(e);
-        }
-    })
-}
-
 // Lấy thông tin tất cả người dùng hoặc một người dùng cụ thể bằng ID
 let getAllUsers = (userId) => {
     return new Promise(async (resolve, reject) => {
@@ -111,7 +92,7 @@ let createNewUser = (data) => {
             if (check === true) {
                 resolve({
                     errCode: 1,
-                    message: 'Email is exist, try another email'
+                    errMessage: 'Email is exist, try another email'
                 })
             } else {
                 // Băm mật khẩu người dùng trước khi lưu vào cơ sở dữ liệu
@@ -135,13 +116,15 @@ let createNewUser = (data) => {
         } catch (e) {
             reject(e)
         }
-    })
+    }
+    )
 }
 
 let deleteUser = (userId) => {
     return new Promise(async (resolve, reject) => {
         let user = await db.User.findOne({
-            where: { id: userId }
+            where: { id: userId },
+            raw: true
         })
         if (!foundUser) {
             resolve({
@@ -189,6 +172,24 @@ let updateUserData = (data) => {
             }
         } catch (e) {
             reject(e)
+        }
+    })
+}
+let checkUserEmail = (userEmail) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: { email: userEmail },
+                raw: true
+            })
+            if (user) {
+                resolve(true)
+            }
+            else {
+                resolve(false)
+            }
+        } catch (e) {
+            reject(e);
         }
     })
 }

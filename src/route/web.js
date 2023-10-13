@@ -4,11 +4,7 @@ import userController from "../controllers/userController";
 
 const router = express.Router();
 
-/**
- * Khởi tạo các route của ứng dụng web
- * @param {object} app - Đối tượng ứng dụng Express
- */
-const initWebRoutes = (app) => {
+let initWebRoutes = (app) => {
     // Định nghĩa route cho trang chủ "/"
     router.get("/", homeController.getHomePage);
 
@@ -39,7 +35,9 @@ const initWebRoutes = (app) => {
     router.get('/api/get-all-users', userController.handleGetAllUsers);
 
     router.post('/api/create-new-user ', userController.handleCreateNewUser);
+
     router.put('/api/edit-user ', userController.handleEditUser);
+
     router.delete('/api/delete-user ', userController.handleDeleteUser);
 
     // Sử dụng router cho các route bắt đầu từ "/" (gốc)
