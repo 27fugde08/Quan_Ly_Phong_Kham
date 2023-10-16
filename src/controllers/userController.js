@@ -70,7 +70,7 @@ let handleDeleteUser = async (req, res) => {
         })
     }
     let message = await userService.deleteUser(req.body.id);
-    // console.log(message);
+    console.log(message);
     return res.status(200).json(message);
 }
 

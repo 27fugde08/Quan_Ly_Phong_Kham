@@ -15,7 +15,6 @@ let hashUserPassword = (password) => {
     })
 }
 
-// Xử lý đăng nhập người dùng
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -122,9 +121,8 @@ let createNewUser = (data) => {
 
 let deleteUser = (userId) => {
     return new Promise(async (resolve, reject) => {
-        let user = await db.User.findOne({
-            where: { id: userId },
-            raw: true
+        let foundUser = await db.User.findOne({
+            where: { id: userId }
         })
         if (!foundUser) {
             resolve({
@@ -132,9 +130,11 @@ let deleteUser = (userId) => {
                 errMessage: `The user isn't exist`
             })
         }
-        await db.User.detroy({
+
+        await db.User.destroy({
             where: { id: userId }
-        });
+        })
+
         resolve({
             errCode: 0,
             message: `The user is deleted`
