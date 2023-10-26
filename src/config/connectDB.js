@@ -1,6 +1,5 @@
 const { Sequelize } = require('sequelize');
 
-// Option 3: Passing parameters separately (other dialects)
 // Khởi tạo đối tượng Sequelize để làm việc với cơ sở dữ liệu MySQL
 const sequelize = new Sequelize('quanlyphongkham', 'root', null, {
     host: 'localhost',
