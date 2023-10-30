@@ -32,9 +32,11 @@ app.use(function (req, res, next) {
 
 
 // Cấu hình ứng dụng Express
-app.use(bodyParser.json()); // Parse các body của request dưới dạng JSON
-app.use(bodyParser.urlencoded({ extended: true })); // Parse các body của request dưới dạng URL-encoded
+// app.use(bodyParser.json()); // Parse các body của request dưới dạng JSON
+// app.use(bodyParser.urlencoded({ extended: true })); // Parse các body của request dưới dạng URL-encoded
 
+app.use(bodyParser.json({ limit: '50mb' })); // Parse các body của request dưới dạng JSON
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); // Parse các body của request dưới dạng URL-encoded
 // Cấu hình view engine
 viewEngine(app);
 
