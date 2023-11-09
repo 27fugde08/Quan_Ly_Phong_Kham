@@ -4,7 +4,7 @@ let getTopDoctorHome = async (req, res) => {
     let limit = req.query.limit;
     if (!limit) limit = 10;
     try {
-        let response = await doctorService.getTopDoctorHome(+limit);
+        let response = await doctorService.getTopDoctorHomeService(+limit);
         return res.status(200).json(response);
     } catch (e) {
         console.log(e);
@@ -42,7 +42,7 @@ let postInforDoctor = async (req, res) => {
 
 let getDetailDoctorById = async (req, res) => {
     try {
-        let infor = await doctorService.getDetailDoctorById(req.body.id);
+        let infor = await doctorService.getDetailDoctorById(req.query.id);
         return res.status(200).json(infor);
     } catch (e) {
         console.log(e);
@@ -68,10 +68,25 @@ let bulkCreateSchedule = async (req, res) => {
     }
 }
 
+let getScheduleByDate = async (req, res) => {
+    try {
+        let infor = await doctorService.getScheduleByDate(req.query.doctorId, req.query.date);
+        return res.status(200).json(infor);
+
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            message: 'Error from server...'
+        })
+    }
+}
+
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
     postInforDoctor: postInforDoctor,
     getDetailDoctorById: getDetailDoctorById,
-    bulkCreateSchedule: bulkCreateSchedule
+    bulkCreateSchedule: bulkCreateSchedule,
+    getScheduleByDate: getScheduleByDate
 }
