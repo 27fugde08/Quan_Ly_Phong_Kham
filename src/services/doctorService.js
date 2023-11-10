@@ -154,22 +154,23 @@ let bulkCreateSchedule = (data) => {
             return item;
           })
         }
+        //get all existing data
         let existing = await db.Schedule.findAll({
           where: { doctorId: data.doctorId, date: data.formatedDate },
           attributes: ['timeType', 'date', 'doctorId', 'maxNumber'],
           raw: true
         });
 
-        //convert date
-        if (existing && existing.length > 0) {
-          existing = existing.map(item => {
-            item.date = new Date(item.date).getTime();
-            return item;
-          })
-        }
+        // //convert date
+        // if (existing && existing.length > 0) {
+        //   existing = existing.map(item => {
+        //     item.date = new Date(item.date).getTime();
+        //     return item;
+        //   })
+        // }
         //compare different
         let toCreate = _.differenceWith(schedule, existing, (a, b) => {
-          return a.timeType === b.timeType && a.date === b.date;
+          return a.timeType === b.timeType && +a.date === +b.date;
         });
 
         //create data
@@ -191,7 +192,6 @@ let bulkCreateSchedule = (data) => {
 let getScheduleByDate = (doctorId, date) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // console.log('check data', data)
       if (!doctorId || !date) {
         resolve({
           errCode: 1,
@@ -203,8 +203,18 @@ let getScheduleByDate = (doctorId, date) => {
             doctorId: doctorId,
             date: date
           }
+          // ,
+          // include: [
+          //   { model: db.Allcode, as: 'timeTypeData', attributes: ['valueEn', ['valueVi']] }
+          // ],
+          // raw: true,
+          // nest: true
         })
         if (!dataSchedule) dataSchedule = [];
+        resolve({
+          errCode: 0,
+          data: dataSchedule
+        })
       }
     } catch (e) {
       reject(e)
