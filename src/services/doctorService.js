@@ -203,12 +203,12 @@ let getScheduleByDate = (doctorId, date) => {
             doctorId: doctorId,
             date: date
           }
-          // ,
-          // include: [
-          //   { model: db.Allcode, as: 'timeTypeData', attributes: ['valueEn', ['valueVi']] }
-          // ],
-          // raw: true,
-          // nest: true
+          ,
+          include: [
+            { model: db.Allcode, as: 'timeTypeData', attributes: ['valueVi', 'valueEn'] }
+          ],
+          raw: false,
+          nest: true
         })
         if (!dataSchedule) dataSchedule = [];
         resolve({
