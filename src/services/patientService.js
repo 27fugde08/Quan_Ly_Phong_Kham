@@ -6,7 +6,7 @@ let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             // (!data.email || !data.doctorId || !data.timeType || !data.date)
-            if (!data.email || !data.doctorId || !data.timeType || !data.date) {
+            if (!data.email || !data.doctorId || !data.timeType || !data.date || !data.fullName) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing required parameter!!'
@@ -14,9 +14,10 @@ let postBookAppointment = (data) => {
             } else {
                 await emailService.sendSimpleEmail({
                     receiverEmail: data.email,
-                    patientName: 'Nguyễn Trọng Duy patient name',
-                    time: '8:00-9:00 Chủ nhật 25/11/2023',
-                    doctorName: 'Nguyễn Trọng Duy',
+                    patientName: data.fullName,
+                    time: data.timeString,
+                    doctorName: data.doctorName,
+                    language: data.language,
                     redirectLink: 'https://www.facebook.com/berrydayisawaking/'
                 })
                 // upsert patient
