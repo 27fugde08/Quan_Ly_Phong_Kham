@@ -1,9 +1,10 @@
 import db from "../models/index";
 require('dotenv').config();
 
-let postBookAppointment = (date) => {
+let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            // (!data.email || !data.doctorId || !data.timeType || !data.date)
             if (!data.email || !data.doctorId || !data.timeType || !data.date) {
                 resolve({
                     errCode: 1,
@@ -16,7 +17,7 @@ let postBookAppointment = (date) => {
                         email: data.email
 
                     },
-                    default: {
+                    defaults: {
                         email: data.email,
                         roleId: "R3"
                     }
@@ -25,7 +26,7 @@ let postBookAppointment = (date) => {
                 if (user && user[0]) {
                     await db.Booking.findOrCreate({
                         where: { patientId: user[0].id },
-                        default: {
+                        defaults: {
                             statusId: "S1",
                             doctorId: data.doctorId,
                             patientId: user[0].id,

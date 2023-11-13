@@ -50,6 +50,7 @@ let initWebRoutes = (app) => {
 
 
     router.post('/api/patient-book-appointment', patientController.postBookAppointment);
+
     return app.use("/", router);
 };
 
