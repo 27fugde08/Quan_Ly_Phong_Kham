@@ -2,7 +2,7 @@ import clinicService from "../services/clinicService"
 let createClinic = async (req, res) => {
     try {
         let infor = await clinicService.createClinic(req.body);
-        return res.status(200).json(infor);
+        // return res.status(200).json(infor);
     } catch (e) {
         console.log(e);
         return res.status(200).json({
@@ -14,6 +14,7 @@ let createClinic = async (req, res) => {
 let getAllClinic = async (req, res) => {
     try {
         let infor = await clinicService.getAllClinic();
+        // console.log('check infor clinic', infor)
         return res.status(200).json(infor);
     } catch (e) {
         console.log(e);

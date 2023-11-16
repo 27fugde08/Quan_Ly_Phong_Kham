@@ -55,11 +55,63 @@ let getBodyHTMLEmail = (dataSend) => {
     }
     return result;
 }
-
-async function main() {
-
-
+let getBodyHTMLEmailRemedy = (dataSend) => {
+    let result = '';
+    if (dataSend.language === 'vi') {
+        result =
+            `
+    <h3>Xin chào ${dataSend.patientName}!</h3>
+    <p>Bạn nhận được email này vì đã đặt lịch khám bệnh online trên Bookingcare</p>
+    <p>Thông tin đơn thuốc/hoá đơn được gửi trong file đính kèm:</p>
+    <div>Xin chân thành cảm ơn</div>
+    `
+    }
+    if (dataSend.language === 'en') {
+        result =
+            `
+            <h3>Hello ${dataSend.patientName}!</h3>
+            <p>You received this email because you booked an online medical appointment on Bookingcare</p>
+             <p>Prescription/invoice information is sent in the attached file:</p>
+           
+            <div>Sincerely thank</div>
+    `
+    }
+    return result;
 }
+let sendAttachment = async (dataSend) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: false,
+                auth: {
+                    user: process.env.EMAIL_APP,
+                    pass: process.env.EMAIL_APP_PASSWORD,
+                },
+            })
+            let info = await transporter.sendMail({
+                from: '"Nguyễn Trọng Duy 👻" <nguyentrongduy27082002@gmail.com>', // sender address
+                to: dataSend.email, // list of receivers
+                subject: "Kết quả đặt lịch khám bệnh ✔", // Subject line
+                html: getBodyHTMLEmailRemedy(dataSend),
+                attachments: [
+                    {
+                        filename: `remedy-${dataSend.patientId}-${new Date().getTime()}.png`,
+                        content: dataSend.imgBase64.split("base64,")[1],
+                        encoding: 'base64'
+                    }
+                ],
+            });
+            resolve(true)
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
-    sendSimpleEmail: sendSimpleEmail
+    sendSimpleEmail: sendSimpleEmail,
+    sendAttachment: sendAttachment
+
 }
